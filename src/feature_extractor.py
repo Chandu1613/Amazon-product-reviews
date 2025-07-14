@@ -1,6 +1,6 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-def extract_features(texts):
+def vectorize_text(corpus):
     vectorizer = TfidfVectorizer(max_features=5000)
-    features = vectorizer.fit_transform(texts)
-    return features, vectorizer
+    X = vectorizer.fit_transform(corpus)
+    return X, vectorizer
