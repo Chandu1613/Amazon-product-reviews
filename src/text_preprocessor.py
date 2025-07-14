@@ -10,13 +10,14 @@ stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
 def clean_text(text):
-    text = text.lower()
+    text = str(text).lower()
     text = re.sub(r'<.*?>', '', text)
     text = re.sub(r'[^a-zA-Z\s]', '', text)
     tokens = text.split()
-    tokens = [lemmatizer.lemmatize(w) for w in tokens if w not in stop_words]
+    tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words]
     return ' '.join(tokens)
 
-def preprocess_column(df, column):
-    df[column] = df[column].astype(str).apply(clean_text)
+def preprocess(df):
+    df['text_clean'] = df['Summary'].astype(str) + " " + df['Text'].astype(str)
+    df['text_clean'] = df['text_clean'].apply(clean_text)
     return df
