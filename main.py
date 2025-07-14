@@ -1,31 +1,31 @@
-from src.data_loader import load_data
+from src.data_loader import load_and_clean_data
 from src.text_preprocessor import preprocess
-from src.feature_extractor import extract_features
-from src.model_trainer import train_models
-from src.evaluator import evaluate_models
+from src.feature_extractor import vectorize_text
+from src.model_trainer import train_models, evaluate_models
+
 from sklearn.model_selection import train_test_split
+import joblib
 
-# 1. Load and filter data
-df = load_data("data/reviews.csv")
-df = df[df['Score'] != 3]
-df['label'] = df['Score'].apply(lambda x: 1 if x > 3 else 0)
+# Step 1: Load data
+df = load_and_clean_data("data/reviews.csv")
 
-# 2. Preprocess
+# Step 2: Preprocess text
 df = preprocess(df)
 
-# 3. Features
-X, vectorizer = extract_features(df['text_clean'])
+# Step 3: Feature extraction
+X, vectorizer = vectorize_text(df['cleaned_review'])
 y = df['label']
 
-# 4. Train/Test split
+# Step 4: Split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# 5. Train multiple models
+# Step 5: Train models
 models = train_models(X_train, y_train)
 
-# 6. Evaluate
-f1_scores = evaluate_models(models, X_test, y_test)
+# Step 6: Evaluate and select best
+best_model, best_name = evaluate_models(models, X_test, y_test)
+print(f"\n✅ Best Model: {best_name}")
 
-# 7. Final result
-best_model = max(f1_scores, key=f1_scores.get)
-print(f"\n✅ Best model based on F1 score: {best_model} with score {f1_scores[best_model]:.4f}")
+# Step 7: Save best model and vectorizer
+joblib.dump(best_model, "model/best_model.pkl")
+joblib.dump(vectorizer, "model/vectorizer.pkl")
