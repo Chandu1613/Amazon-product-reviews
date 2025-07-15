@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 import joblib
 
 # Step 1: Load data
-df = load_and_clean_data("data/reviews.csv")
+df = load_and_clean_data("Amazon-reviews-limpo.csv")
 
 # Step 2: Preprocess text
 df = preprocess(df)
@@ -27,5 +27,10 @@ best_model, best_name = evaluate_models(models, X_test, y_test)
 print(f"\n✅ Best Model: {best_name}")
 
 # Step 7: Save best model and vectorizer
-joblib.dump(best_model, "model/best_model.pkl")
-joblib.dump(vectorizer, "model/vectorizer.pkl")
+for attr in ['X_train_', 'X_', 'y_', 'oob_decision_function_', 'estimators_']:
+    if hasattr(best_model, attr):
+        print(f"Removing attribute: {attr}")
+        delattr(best_model, attr)
+        
+joblib.dump(best_model, "model/best_model.pkl",compress=5)
+joblib.dump(vectorizer, "model/vectorizer.pkl",compress=4)
