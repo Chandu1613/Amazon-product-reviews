@@ -31,11 +31,11 @@ This project is a full-stack **Sentiment Analysis** solution that uses **Natural
    cd sentiment-analysis-app
 
 2. **Install dependencies**
-    '''bash
+    ```bash
     pip install -r requirements.txt
 
 3. **Run the Streamlit app**
-    '''bash
+    ```bash
     streamlit run app/app.py
 
 ## 👨‍💻 Author
