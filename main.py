@@ -26,11 +26,6 @@ models = train_models(X_train, y_train)
 best_model, best_name = evaluate_models(models, X_test, y_test)
 print(f"\n✅ Best Model: {best_name}")
 
-# Step 7: Save best model and vectorizer
-for attr in ['X_train_', 'X_', 'y_', 'oob_decision_function_', 'estimators_']:
-    if hasattr(best_model, attr):
-        print(f"Removing attribute: {attr}")
-        delattr(best_model, attr)
-        
-joblib.dump(best_model, "model/best_model.pkl",compress=5)
-joblib.dump(vectorizer, "model/vectorizer.pkl",compress=4)
+# Step 7: Save best model and vectorizer        
+joblib.dump(best_model, "model/best_model.pkl",compress=9)
+joblib.dump(vectorizer, "model/vectorizer.pkl",compress=6)
