@@ -1,35 +1,23 @@
-import streamlit as st
+from flask import Flask, render_template, request
 import joblib
-from src.text_preprocessor import clean_text
+from src.text_preprocessor import clean_text  # your cleaning logic
 
-# App Configuration
-st.set_page_config(page_title="🧠 Sentiment Analyzer", layout="centered")
+app = Flask(__name__)
 
 # Load model and vectorizer
 model = joblib.load("model/best_model.pkl")
 vectorizer = joblib.load("model/vectorizer.pkl")
 
-st.markdown(
-    """
-    <h1 style='text-align: center;'>📝 Product Review Sentiment Analyzer</h1>
-    <p style='text-align: center; font-size: 18px;'>Enter a product review below and find out if it's 💚 Positive or 💔 Negative using machine learning.</p>
-    <hr>
-    """,
-    unsafe_allow_html=True
-)
-
-review = st.text_area("🗣️ Write your product review here:", height=150, placeholder="e.g., This camera is amazing! The picture quality is stunning...")
-
-if st.button("🔍 Analyze Sentiment"):
-    if review.strip() == "":
-        st.warning("⚠️ Please enter a review before analyzing.")
-    else:
+@app.route("/", methods=["GET", "POST"])
+def index():
+    sentiment = None
+    if request.method == "POST":
+        review = request.form["review"]
         cleaned = clean_text(review)
         vectorized = vectorizer.transform([cleaned])
         prediction = model.predict(vectorized)[0]
+        sentiment = "Positive 😊" if prediction == 1 else "Negative 😠"
+    return render_template("index.html", sentiment=sentiment)
 
-        if prediction == 1:
-            st.success("✅ **Sentiment: Positive** 😊\nThis review expresses a positive opinion.")
-            st.balloons()
-        else:
-            st.error("❌ **Sentiment: Negative** 😠\nThis review expresses a negative opinion.")
+if __name__ == "__main__":
+    app.run(debug=True)

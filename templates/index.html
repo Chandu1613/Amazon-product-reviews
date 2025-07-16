@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Review Sentiment Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Product Review Sentiment Analyzer</h1>
+        <p>Enter a product review below and find out if it's 💚 Positive or 💔 Negative using machine learning.</p>
+        <form method="post">
+            <label for="review">🗣️ Write your product review here:</label><br>
+            <textarea name="review" id="review" rows="6" placeholder="e.g., This camera is amazing! The picture quality is stunning..."></textarea><br>
+            <button type="submit">🔍 Analyze Sentiment</button>
+        </form>
+
+        {% if sentiment %}
+            <div class="result">
+                <strong>Sentiment:</strong> {{ sentiment }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
