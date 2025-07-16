@@ -34,9 +34,9 @@ This project is a full-stack **Sentiment Analysis** solution that uses **Natural
     ```bash
     pip install -r requirements.txt
 
-3. **Run the Streamlit app**
+3. **Run the Flask app**
     ```bash
-    streamlit run app/app.py
+    python app.py
 
 ## 👨‍💻 Author
 - Devu Jagadish – Machine Learning Engineer
